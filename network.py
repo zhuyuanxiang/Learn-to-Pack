@@ -11,7 +11,8 @@ from keras.models import Sequential,load_model
 from keras import models,layers,optimizers
 from keras.layers import Dense, Activation,Embedding,LSTM,Dropout
 from shapely.geometry import Polygon
-from tools.polygon import GeoFunc,PltFunc
+from learn_to_pack.geometry.pltfunc import PltFunc
+from learn_to_pack.geometry.geofunc import GeoFunc
 import matplotlib.pyplot as plt
 import random
 import pandas as pd

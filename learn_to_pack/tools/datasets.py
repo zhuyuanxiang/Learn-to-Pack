@@ -18,28 +18,17 @@ from datetime import datetime
 
 import pandas as pd
 
+from learn_to_pack.config import datasets_name
+from learn_to_pack.config import scale
 from learn_to_pack.geometry.geofunc import GeoFunc
 from learn_to_pack.tools.files import getProjectPath
 
 
-def get_data(index=6):
-    """
-    报错数据集有（空心）：han,jakobs1,jakobs2
-    形状过多暂时未处理：shapes、shirt、swim、trousers
-    """
-    datasets_name = ["ga", "albano", "blaz1", "blaz2", "dighe1", "dighe2", "fu", "han", "jakobs1", "jakobs2", "mao",
-                     "marques", "shapes", "shirts", "swim", "trousers", "convex", "simple", "ali2", "ali3"]
+def get_data(index=5):
     print("开始处理", datasets_name[index], "数据集")
     # 暂时没有考虑宽度，全部缩放来表示
-    scale = [100, 0.5, 100, 100, 20, 20, 20, 10, 20, 20, 0.5, 20, 50, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1]
     print("缩放", scale[index], "倍")
     df = pd.read_csv(getProjectPath() + "\\data\\" + datasets_name[index] + ".csv")
-    # ToDo: 修改为通用的获取数据方式
-    # user_name = os.getlogin()
-    # if user_name == 'Prinway' or user_name == 'mac':
-    #     df = pd.read_csv("data/" + datasets_name[index] + ".csv")
-    # else:
-    #     df = pd.read_csv("/Users/sean/Documents/Projects/Packing-Algorithm/data/" + datasets_name[index] + ".csv")
     polygons = []
     for i in range(0, df.shape[0]):
         # for i in range(0,4):
@@ -52,10 +41,6 @@ def get_data(index=6):
 
 def get_convex(**kw):
     df = pd.read_csv(getProjectPath() + "\\record\\convex.csv")
-    # if os.getlogin() == 'Prinway':
-    #     df = pd.read_csv("record/convex.csv")
-    # else:
-    #     df = pd.read_csv("/Users/sean/Documents/Projects/data/convex.csv")
     polygons = []
     poly_index = []
     if 'num' in kw:

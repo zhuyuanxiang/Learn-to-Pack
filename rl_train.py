@@ -1,16 +1,12 @@
 import argparse
 import os
 import pprint as pp
-import numpy as np
 import torch
 import torch.optim as optim
-import torch.autograd as autograd
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 import numpy as np
-import pandas as pd
 import multiprocessing
-import datetime
 from tqdm import tqdm
 from multiprocessing import Pool
 from torch.optim import lr_scheduler
@@ -18,8 +14,9 @@ from torch.autograd import Variable
 from torch.utils.data import DataLoader,Dataset
 from torch.utils.tensorboard import SummaryWriter
 from tools.rl import NeuralCombOptRL
-from tools.packing import NFPAssistant,PolyListProcessor
-from heuristic import BottomLeftFill
+from learn_to_pack.algorithms.heuristic.bottom_left_fill import PolyListProcessor
+from learn_to_pack.shapes.NFPAssistant1 import NFPAssistant
+from learn_to_pack.algorithms.heuristic.bottom_left_fill import BottomLeftFill
 from sequence import GA
 
 train_preload=None
@@ -110,7 +107,7 @@ class PolygonsDataset(Dataset):
         #df = pd.read_csv('record/rec100_nfp.csv') # 把nfp history读入内存
         #nfp_asst=NFPAssistant(polys,load_history=True,history=df)
             bfl=BottomLeftFill(width,polys)
-            return bfl.getLength()
+            return bfl.get_length()
         except:
             return 9999
 
@@ -150,7 +147,7 @@ def reward_old(sample_solution, USE_CUDA=False):
             nfp_asst=NFPAssistant(poly_new,load_history=True,history_path='record/{}/{}.csv'.format(args['run_name'],index+cur_batch*batch_size))
             # blf=BottomLeftFill(args['width'],poly_new,NFPAssistant=nfp_asst)
             res.append(p.apply_async(getBLF,args=(args['width'],poly_new,nfp_asst)))
-            # result[index]=blf.getLength()
+            # result[index]=blf.get_length()
             # thread = BottomLeftFillThread(index,args['width'],poly_new) 
             # threads.append(thread)
         p.close()
@@ -181,8 +178,8 @@ def str2bool(v):
 
 def getBLF(width,poly,nfp_asst):
     blf=BottomLeftFill(width,poly,NFPAssistant=nfp_asst)
-    #blf.showAll()
-    return blf.getLength()
+    #blf.show_all()
+    return blf.get_length()
         
 def getGA(width,poly,nfp_asst,generations=10):
     polys_GA=PolyListProcessor.getPolyObjectList(poly,[0])

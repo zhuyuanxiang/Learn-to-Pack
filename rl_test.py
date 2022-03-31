@@ -11,11 +11,14 @@ import itertools
 from shutil import copyfile
 from multiprocessing import Pool
 from tqdm import tqdm
-from heuristic import BottomLeftFill,RatotionPoly
+from heuristic import RatotionPoly
+from learn_to_pack.algorithms.heuristic.bottom_left_fill import BottomLeftFill
 from sequence import GA
 from shapely.geometry import Polygon
-from tools.packing import NFPAssistant,PolyListProcessor
-from tools.polygon import getData,GeoFunc,PltFunc
+from learn_to_pack.algorithms.heuristic.bottom_left_fill import PolyListProcessor
+from learn_to_pack.shapes.NFPAssistant1 import NFPAssistant
+from learn_to_pack.tools.datasets import get_data
+from learn_to_pack.geometry.geofunc import GeoFunc
 from tools.vectorization import vectorFunc
 
 class GenerateData_xy(object):
@@ -61,7 +64,7 @@ class GenerateData_xy(object):
     def generateTestData(size,poly_num=10,max_point_num=4):
         x=[]
         for i in range(size):
-            polys=polys2data(getData(index=5))
+            polys=polys2data(get_data(index=5))
             # polys=generatePolygon(poly_num,max_point_num)
             polys=polys.T
             x.append(polys)
@@ -231,7 +234,7 @@ class GenerateData_vector(object):
                         polyCheck=True
                 polys.append(poly)
             # blf=BottomLeftFill(760,polys)
-            # blf.showAll()
+            # blf.show_all()
             data.append(polys)
             vector=[]
             for poly in polys:
@@ -258,7 +261,7 @@ class GenerateData_vector(object):
     def exportDataset(index,export_name):
         data=[]
         vectors=[]
-        polys=getData(index)
+        polys=get_data(index)
         data.append(polys)
         vector=[]
         for poly in polys:
@@ -331,7 +334,7 @@ class InitSeq(object):
                 for poly in item:
                     polys_final.append(poly[0])
                 blf=BottomLeftFill(self.width,polys_final,NFPAssistant=self.NFPAssistant)
-                height=blf.getLength()
+                height=blf.get_length()
                 heights.append(height)
                 if height<min_height:
                     min_height=height
@@ -353,7 +356,7 @@ class InitSeq(object):
         best_order=[]
         for item in all_com:
             seq=self.getPolys(item)
-            height=BottomLeftFill(self.width,seq,NFPAssistant=self.NFPAssistant).getLength()
+            height=BottomLeftFill(self.width,seq,NFPAssistant=self.NFPAssistant).get_length()
             if height<min_height:
                 best_order=item
                 min_height=height
@@ -441,8 +444,8 @@ def BLFwithSequence(test_path,width,seq_path=None,GA_algo=False):
             multi_res.append(p.apply_async(GA,args=(width,polys_GA,nfp_asst)))
         else:
             blf=BottomLeftFill(width,polys_final,NFPAssistant=nfp_asst)
-            #blf.showAll()
-            height.append(blf.getLength())
+            #blf.show_all()
+            height.append(blf.get_length())
     if GA_algo:
         p.close()
         p.join()

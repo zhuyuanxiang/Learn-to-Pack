@@ -1,6 +1,8 @@
-from tools.polygon import PltFunc,GeoFunc,NFP,getData
-from sequence import BottomLeftFill
-from tools.packing import NFPAssistant
+from learn_to_pack.geometry.pltfunc import PltFunc
+from learn_to_pack.geometry.geofunc import GeoFunc
+from learn_to_pack.shapes.nfp import NFP
+from learn_to_pack.algorithms.heuristic.bottom_left_fill import BottomLeftFill
+from learn_to_pack.shapes.NFPAssistant1 import NFPAssistant
 from tools.lp_assistant import LPAssistant
 from shapely.geometry import Polygon,mapping
 from shapely import affinity
@@ -218,7 +220,7 @@ def showLPResult():
     PltFunc.showPlt()
 
 if __name__ == '__main__':
-    # initialResult(getData())
+    # initialResult(get_data())
     # print(Polygon([[0,0],[10,100],[200,10]]).bounds[0])
     # ReverseFunction()
     # testCPlusResult()

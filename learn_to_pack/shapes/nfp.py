@@ -24,6 +24,8 @@ from shapely.geometry import Polygon
 
 from learn_to_pack.geometry.geofunc import GeoFunc
 from learn_to_pack.geometry.pltfunc import PltFunc
+from learn_to_pack.tools.datasets import get_data
+from learn_to_pack.tools.times import run_time
 
 
 class NFP(object):
@@ -325,9 +327,9 @@ class NFP(object):
     # 显示最终结果
     def showResult(self):
         PltFunc.addPolygon(self.sliding)
-        print("self.sliding=", self.sliding)
+        # print("self.sliding=", self.sliding)
         PltFunc.addPolygon(self.stationary)
-        print("self.stationary=", self.stationary)
+        # print("self.stationary=", self.stationary)
         PltFunc.addPolygonColor(self.nfp)
         PltFunc.showPlt()
 
@@ -351,8 +353,8 @@ class NFP(object):
 
 def tryNFP():
     """计算NFP然后寻找最合适位置"""
-    test_two_polygons()
-
+    # test_two_polygons()
+    test_two_polygons_in_dental()
     # test_two_rects()
     # test_bfp()
     pass
@@ -397,6 +399,18 @@ def test_two_rects():
     print("original rect1=", rect1)
     print("original rect2=", rect2)
     print("nfp(rect1,rect2)=", nfp.nfp)
+
+
+@run_time
+def test_two_polygons_in_dental():
+    polygons = get_data(index=0)
+    polygon1 = polygons[2]
+    polygon2 = polygons[3]
+    # print("normal polygon1=", polygon1)
+    GeoFunc.slidePoly(polygon1, 1000, 1000)
+    # print("move polygon1=", polygon1)
+    nfp = NFP(polygon1, polygon2, show=True, rectangle=False)
+    # print("nfp(polygon1,polygon2)=", nfp.nfp)
 
 
 def main(name):

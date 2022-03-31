@@ -3,8 +3,9 @@
 1. 直接按照重心的高低排列，逐一添加
 2. 通过比较高的
 '''
-from polygon import GeoFunc
-from sequence import BottomLeftFill
+from learn_to_pack.geometry.geofunc import GeoFunc
+from learn_to_pack.algorithms.heuristic.bottom_left_fill import BottomLeftFill
+
 
 # Guided Local Search的变体
 class variantGLS(object):
